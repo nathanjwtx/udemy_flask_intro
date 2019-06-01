@@ -12,14 +12,16 @@ items = [{
 
 class Item(Resource):
     def get(self, item_name):
-        item = filter(lambda x: x["name"].lower() ==
-                      item_name.lower(), items)
-        # for item in items:
-        #     if item["name"].lower() == item_name.lower():
-        return item
-        # return {"item": "Not found"}, 404
+        item = list(filter(lambda x: x["name"].lower() ==
+                    item_name.lower(), items))
+        # next(list(), None)
+
+        return {"item": item[:1]}, 200 if item else 404
 
     def post(self, item_name):
+        if next(filter(lambda x: x["name"].lower() ==
+                        item_name.lower(), items), None):
+            return {"Message": f"{item_name} already exists"}, 400
         request_data = request.get_json()
         item = {"name": item_name.capitalize(), "price": request_data["price"]}
         items.append(item)
