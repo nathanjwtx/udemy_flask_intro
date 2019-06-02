@@ -1,8 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
+from flask_jwt import JWT, jwt_required
+
+from security import authenticate, identity
 
 app = Flask(__name__)
+app.secret_key = "nathan"
 api = Api(app)
+
+# authenticate and identity are function names from security.py
+jwt = JWT(app, authenticate, identity)
 
 items = [{
     "name": "Charcoal",
@@ -11,6 +18,7 @@ items = [{
 
 
 class Item(Resource):
+    @jwt_required()
     def get(self, item_name):
         item = list(filter(lambda x: x["name"].lower() ==
                     item_name.lower(), items))
@@ -20,7 +28,7 @@ class Item(Resource):
 
     def post(self, item_name):
         if next(filter(lambda x: x["name"].lower() ==
-                        item_name.lower(), items), None):
+                       item_name.lower(), items), None):
             return {"Message": f"{item_name} already exists"}, 400
         request_data = request.get_json()
         item = {"name": item_name.capitalize(), "price": request_data["price"]}
