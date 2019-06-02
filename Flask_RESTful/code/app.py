@@ -22,7 +22,6 @@ class Item(Resource):
     def get(self, item_name):
         item = list(filter(lambda x: x["name"].lower() ==
                     item_name.lower(), items))
-        # next(list(), None)
 
         return {"item": item[:1]}, 200 if item else 404
 
@@ -34,6 +33,12 @@ class Item(Resource):
         item = {"name": item_name.capitalize(), "price": request_data["price"]}
         items.append(item)
         return item, 201
+
+    def delete(self, item_name):
+        global items
+        items = list(filter(lambda x: x["name"].lower() !=
+                     item_name.lower(), items))
+        return {"message": f"{item_name} deleted"}
 
 
 class Items(Resource):
