@@ -40,6 +40,17 @@ class Item(Resource):
                      item_name.lower(), items))
         return {"message": f"{item_name} deleted"}
 
+    def put(self, item_name):
+        data = request.get_json()
+        item = next(filter(lambda x: x["name"].lower() == item_name.lower(),
+                    items), None)
+        if item is None:
+            item = {"name": item_name.capitalize(), "price": data["price"]}
+            items.append(item)
+        else:
+            item.update(data)
+        return item
+
 
 class Items(Resource):
     def get(self):
