@@ -1,0 +1,4 @@
+app.py needs to be run from the same folder as the data.db location to allow the
+methods that use it to know the path.
+
+in this app the path is the .flaskenv file so this can be run as "flask run" as usual
