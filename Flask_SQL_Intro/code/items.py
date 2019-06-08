@@ -23,6 +23,16 @@ class Item(Resource):
         if row:
             return {"Item": {"name": row[0], "price": row[1]}}
 
+    @classmethod
+    def insert(cls, item):
+        connection = sqlite3.connect("data.db")
+        cursor = connection.cursor()
+        query = "insert into items values (null, ?, ?)"
+        cursor.execute(query, (item["name"], item["price"],))
+
+        connection.commit()
+        connection.close()
+
     @jwt_required()
     def get(self, item_name):
         item = self.find_by_name(item_name)
@@ -40,13 +50,11 @@ class Item(Resource):
 
         request_data = request.get_json()
         item = {"name": item_name.capitalize(), "price": request_data["price"]}
-        connection = sqlite3.connect("data.db")
-        cursor = connection.cursor()
-        query = "insert into items values (null, ?, ?)"
-        cursor.execute(query, (item["name"], item["price"],))
 
-        connection.commit()
-        connection.close()
+        try:
+            self.insert(item)
+        except:
+            return {"message": "an error occured inserting the item"}, 500
 
         return item, 201
 
@@ -69,7 +77,7 @@ class Item(Resource):
                     items), None)
         if item is None:
             item = {"name": item_name.capitalize(), "price": data["price"]}
-            items.append(item)
+            self.insert(item)
         else:
             item.update(data)
         return item
