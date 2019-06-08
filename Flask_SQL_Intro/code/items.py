@@ -16,7 +16,7 @@ class Item(Resource):
         cursor = connection.cursor()
 
         query = "select * from items where name = ?"
-        result = cursor.execute(query, (item_name.lower(),))
+        result = cursor.execute(query, (item_name.lower().capitalize(),))
         row = result.fetchone()
         connection.close()
 
@@ -29,6 +29,16 @@ class Item(Resource):
         cursor = connection.cursor()
         query = "insert into items values (null, ?, ?)"
         cursor.execute(query, (item["name"], item["price"],))
+
+        connection.commit()
+        connection.close()
+
+    @classmethod
+    def update(cls, item):
+        connection = sqlite3.connect("data.db")
+        cursor = connection.cursor()
+        query = ("update items set price = ? where name = ?")
+        cursor.execute(query, (item["price"], item["name"],))
 
         connection.commit()
         connection.close()
@@ -72,15 +82,22 @@ class Item(Resource):
 
     def put(self, item_name):
         # data = request.get_json() # replaced by parser code above
-        data = parser.parse_args()
-        item = next(filter(lambda x: x["name"].lower() == item_name.lower(),
-                    items), None)
+        data = Item.parser.parse_args()
+        item = self.find_by_name(item_name)
+        updated_item = {"name": item_name.lower().capitalize(), "price": data["price"]}
+
         if item is None:
-            item = {"name": item_name.capitalize(), "price": data["price"]}
-            self.insert(item)
+            try:
+                self.insert(updated_item)
+            except:
+                return {"Message": "An error occured inserting the item"}, 500
         else:
-            item.update(data)
-        return item
+            try:
+                self.update(updated_item)
+            except:
+                return {"Message": "An error occured updating the item"}, 500
+
+        return updated_item
 
 
 class Items(Resource):
