@@ -1,14 +1,14 @@
 from werkzeug.security import safe_str_cmp
-from resorces.user import User
+from models.user import UserModel
 
-users = [
-    User(1, "fred", "bob")
-]
+# users = [
+#     User(1, "fred", "bob")
+# ]
 
 
 def authenticate(username, password):
     print(username)
-    user = User.find_by_username(username)
+    user = UserModel.find_by_username(username)
     # if user and user.password == password: # python3+
     if user and safe_str_cmp(user.password, password):
         return user
@@ -16,4 +16,4 @@ def authenticate(username, password):
 
 def identity(payload):
     user_id = payload["identity"]
-    return User.find_by_id(user_id)
+    return UserModel.find_by_id(user_id)
