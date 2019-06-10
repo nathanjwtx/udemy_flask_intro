@@ -1,6 +1,7 @@
 import sqlite3
 from flask_restful import Resource, reqparse
 
+
 class User(object):
     def __init__(self, user_id, username, password):
         # MUST be self.id else it will not work with flask_JWT idenity function
