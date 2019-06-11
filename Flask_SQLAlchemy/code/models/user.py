@@ -1,9 +1,18 @@
 import sqlite3
+from db import db
 
 
-class UserModel(object):
+class UserModel(db.Model):
+    # SQLAlchemy model setup
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=true)
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(80))
+
     def __init__(self, user_id, username, password):
         # MUST be self.id else it will not work with flask_JWT idenity function
+        # property names must match model names in order to be saved in db
+        # not all properties have to be saved to db
         self.id = user_id
         self.username = username
         self.password = password
