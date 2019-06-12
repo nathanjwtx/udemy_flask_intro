@@ -5,7 +5,7 @@ from db import db
 class UserModel(db.Model):
     # SQLAlchemy model setup
     __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=true)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
 
@@ -19,7 +19,7 @@ class UserModel(db.Model):
 
     @classmethod
     def find_by_username(cls, username):
-        connection = sqlite3.connect("data.db")
+        connection = sqlite3.connect("code/data.db")
         cursor = connection.cursor()
 
         query = "select * from users where username=?"
@@ -36,7 +36,7 @@ class UserModel(db.Model):
 
     @classmethod
     def find_by_id(cls, _id):
-        connection = sqlite3.connect("data.db")
+        connection = sqlite3.connect("/code/data.db")
         cursor = connection.cursor()
 
         query = "select * from users where id=?"

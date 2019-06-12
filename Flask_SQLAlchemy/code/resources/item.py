@@ -39,7 +39,7 @@ class Item(Resource):
         return item.json(), 201
 
     def delete(self, item_name):
-        connection = sqlite3.connect("data.db")
+        connection = sqlite3.connect("code/data.db")
         cursor = connection.cursor()
 
         query = "delete from items where name=?"

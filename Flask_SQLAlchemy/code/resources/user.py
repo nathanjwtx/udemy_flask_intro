@@ -18,7 +18,7 @@ class UserRegister(Resource):
         data = UserRegister.parser.parse_args()
 
         if UserModel.find_by_username(data["username"]) is None:
-            connection = sqlite3.connect("data.db")
+            connection = sqlite3.connect("code/data.db")
             cursor = connection.cursor()
             
             query = "insert into users values (null, ?, ?)"

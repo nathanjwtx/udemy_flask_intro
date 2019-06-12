@@ -18,7 +18,7 @@ class ItemModel(db.Model):
 
     @classmethod
     def find_by_name(cls, item_name):
-        connection = sqlite3.connect("data.db")
+        connection = sqlite3.connect("code/data.db")
         cursor = connection.cursor()
 
         query = "select * from items where name = ?"
