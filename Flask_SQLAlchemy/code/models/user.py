@@ -36,7 +36,7 @@ class UserModel(db.Model):
 
     @classmethod
     def find_by_id(cls, _id):
-        connection = sqlite3.connect("/code/data.db")
+        connection = sqlite3.connect("code/data.db")
         cursor = connection.cursor()
 
         query = "select * from users where id=?"
