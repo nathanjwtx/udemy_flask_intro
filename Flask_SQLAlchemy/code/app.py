@@ -13,6 +13,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "nathan"
 api = Api(app)
 
+# table definitions are imported from the __tablename__ definitions in the
+# models
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
+
 # authenticate and identity are function names from security.py
 jwt = JWT(app, authenticate, identity)
 
