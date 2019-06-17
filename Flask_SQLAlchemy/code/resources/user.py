@@ -17,7 +17,7 @@ class UserRegister(Resource):
     def post(self):
         data = UserRegister.parser.parse_args()
 
-        if UserModel.find_by_username(data["username"]) is None:
+        if UserModel.find_by_username(data["username"]) is not None:
             return {"message": "User already exists"}, 400
 
         user = UserModel(data["username"], data["password"])

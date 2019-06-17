@@ -12,9 +12,9 @@ class Item(Resource):
                         help="Cannot be blank")
 
     parser.add_argument("store_id",
-                    type=int,
-                    required=True,
-                    help="Items need a store id")
+                        type=int,
+                        required=True,
+                        help="Items need a store id")
 
     @jwt_required()
     def get(self, item_name):
